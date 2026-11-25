@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:capstone_bague/models/item.dart';
 import 'package:capstone_bague/widgets/item_image.dart';
-//import 'package:capstone_bague/';
+import 'package:capstone_bague/widgets/status_chip.dart';
 
-class ItemCard {
+class ItemCard extends StatelessWidget {
   final Item item;
   final VoidCallback onTap;
 
@@ -53,6 +53,7 @@ class ItemCard {
               ],
             ),
           ),
+          trailing: StatusChip(item: item),
         ),
       ),
     );

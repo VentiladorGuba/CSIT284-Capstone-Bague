@@ -1,6 +1,9 @@
 import 'package:capstone_bague/models/dummy_items.dart';
 import 'package:capstone_bague/models/item.dart';
+import 'package:capstone_bague/widgets/item_card.dart';
 import 'package:flutter/material.dart';
+import 'package:capstone_bague/screens/item_detail_screen.dart';
+import 'package:capstone_bague/screens/post_item_screen.dart';
 
 enum FeedFilter { all, lost, found }
 
@@ -27,10 +30,30 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }).toList();
 
-    // Newest first.
     filtered.sort((a, b) => b.date.compareTo(a.date));
     return filtered;
   }
+
+  Future<void> _openDetail(Item item) async {
+    final claimed = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(builder: (_) => ItemDetailScreen(item: item)),
+    );
+    if (claimed == true) {
+      setState(() => item.claimed = true);
+    }
+  }
+
+  Future<void> _openPostScreen() async {
+    final newItem = await Navigator.push<Item>(
+      context,
+      MaterialPageRoute(builder: (_) => const PostItemScreen()),
+    );
+    if (newItem != null) {
+      setState(() => _items.add(newItem));
+    }
+  }
+
 
 
   @override
@@ -65,7 +88,10 @@ class _HomeScreenState extends State<HomeScreen> {
               itemCount: items.length,
               itemBuilder: (context, index){
                 final item = items[index];
-                return ItemCard(context);
+                return ItemCard(
+                  item: item,
+                  onTap: ()=> _openDetail(item),
+                );
               },
             ),
           ),
